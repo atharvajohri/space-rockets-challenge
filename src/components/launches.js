@@ -113,7 +113,7 @@ export function LaunchItem({ launch }) {
         <Flex>
           <Text fontSize="sm">{formatDate(launch.launch_date_utc)} </Text>
           <Text color="gray.500" ml="2" fontSize="sm">
-            {timeAgo(launch.launch_date_utc)}
+            {timeAgo(launch.launch_date_local)}
           </Text>
         </Flex>
       </Box>

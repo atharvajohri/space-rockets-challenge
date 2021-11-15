@@ -19,10 +19,11 @@ import {
   Stack,
   AspectRatioBox,
   StatGroup,
+  Tooltip,
 } from "@chakra-ui/core";
 
 import { useSpaceX } from "../utils/use-space-x";
-import { formatDateTime } from "../utils/format-date";
+import { formatLocalDateTime, formatDateTime } from "../utils/format-date";
 import Error from "./error";
 import Breadcrumbs from "./breadcrumbs";
 
@@ -123,8 +124,19 @@ function TimeAndLocation({ launch }) {
             Launch Date
           </Box>
         </StatLabel>
+
         <StatNumber fontSize={["md", "xl"]}>
-          {formatDateTime(launch.launch_date_local)}
+          <Tooltip
+            label={`${formatDateTime(
+              launch.launch_date_local
+            )} in your local time`}
+          >
+            {/* Since we are getting the date we need directly from SpaceX's API,
+            we can parse it out and format it as needed. UTC Strings are standardized -
+            so the parser should work for all UTC DateTime Strings */}
+
+            {formatLocalDateTime(launch.launch_date_local)}
+          </Tooltip>
         </StatNumber>
         <StatHelpText>{timeAgo(launch.launch_date_utc)}</StatHelpText>
       </Stat>

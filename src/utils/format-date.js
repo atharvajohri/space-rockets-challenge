@@ -18,3 +18,20 @@ export function formatDateTime(timestamp) {
     timeZoneName: "short",
   }).format(new Date(timestamp));
 }
+
+export function formatLocalDateTime(timestamp) {
+  if (!timestamp || typeof timestamp !== "string") {
+    return formatDateTime(timestamp);
+  }
+
+  const dateTimeRegex = /(....-..-..)T(..:..:..)(.*)/; //probably a better way to write this
+  const launchLocalDateTimeParts = dateTimeRegex.exec(timestamp);
+
+  if (!launchLocalDateTimeParts || launchLocalDateTimeParts && launchLocalDateTimeParts.length != 4) {
+    return formatDateTime(timestamp);
+  }
+
+  return `${formatDate(timestamp)} ${
+    launchLocalDateTimeParts[2]
+  } ${`GMT ${launchLocalDateTimeParts[3]}`}`;
+}
