@@ -1,4 +1,11 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  addFavorite,
+  removeFavorite,
+  isFavorite,
+} from "../store/favoritesSlice";
+
 import { Badge, Box, SimpleGrid, Text } from "@chakra-ui/core";
 import { Link } from "react-router-dom";
 
@@ -7,7 +14,10 @@ import Breadcrumbs from "./breadcrumbs";
 import LoadMoreButton from "./load-more-button";
 import { useSpaceXPaginated } from "../utils/use-space-x";
 
+import LikeButton from "./like-button";
+
 const PAGE_SIZE = 12;
+const RESOURCE_KEY = "site_id";
 
 export default function LaunchPads() {
   const { data, error, isValidating, size, setSize } = useSpaceXPaginated(
@@ -28,7 +38,10 @@ export default function LaunchPads() {
           data
             .flat()
             .map((launchPad) => (
-              <LaunchPadItem key={launchPad.site_id} launchPad={launchPad} />
+              <LaunchPadItem
+                key={launchPad[RESOURCE_KEY]}
+                launchPad={launchPad}
+              />
             ))}
       </SimpleGrid>
       <LoadMoreButton
@@ -41,7 +54,14 @@ export default function LaunchPads() {
   );
 }
 
-function LaunchPadItem({ launchPad }) {
+//Launch Pad Item comes now in a new Mini flavor 
+//the mini version is rendered in the sidebar
+export function LaunchPadItem({ launchPad, mini = false }) {
+  const dispatch = useDispatch();
+  const isFavorited = useSelector((state) =>
+    isFavorite(state, { idKey: RESOURCE_KEY, id: launchPad[RESOURCE_KEY] })
+  );
+
   return (
     <Box
       as={Link}
@@ -63,17 +83,28 @@ function LaunchPadItem({ launchPad }) {
               Retired
             </Badge>
           )}
-          <Box
-            color="gray.500"
-            fontWeight="semibold"
-            letterSpacing="wide"
-            fontSize="xs"
-            textTransform="uppercase"
-            ml="2"
-          >
-            {launchPad.attempted_launches} attempted &bull;{" "}
-            {launchPad.successful_launches} succeeded
-          </Box>
+
+          {!mini && (
+            <Box
+              color="gray.500"
+              fontWeight="semibold"
+              letterSpacing="wide"
+              fontSize="xs"
+              textTransform="uppercase"
+              ml="2"
+            >
+              {launchPad.attempted_launches} attempted &bull;{" "}
+              {launchPad.successful_launches} succeeded
+            </Box>
+          )}
+
+          <LikeButton
+            isFavorited={isFavorited}
+            addFavorite={() => dispatch(addFavorite(launchPad))}
+            removeFavorite={() =>
+              dispatch(removeFavorite({ item: launchPad, idKey: RESOURCE_KEY }))
+            }
+          />
         </Box>
 
         <Box

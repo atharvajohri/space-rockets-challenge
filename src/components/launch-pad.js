@@ -1,4 +1,11 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  addFavorite,
+  removeFavorite,
+  isFavorite,
+} from "../store/favoritesSlice";
+
 import { useParams } from "react-router-dom";
 import { MapPin, Navigation } from "react-feather";
 import {
@@ -22,10 +29,18 @@ import Error from "./error";
 import Breadcrumbs from "./breadcrumbs";
 import { LaunchItem } from "./launches";
 
-export default function LaunchPad() {
-  let { launchPadId } = useParams();
-  const { data: launchPad, error } = useSpaceX(`/launchpads/${launchPadId}`);
+import LikeButton from "./like-button";
 
+const RESOURCE_KEY = "site_id";
+
+export default function LaunchPad() {
+  const { launchPadId } = useParams();
+  const dispatch = useDispatch();
+  const isFavorited = useSelector((state) =>
+    isFavorite(state, { idKey: RESOURCE_KEY, id: launchPadId })
+  );
+
+  const { data: launchPad, error } = useSpaceX(`/launchpads/${launchPadId}`);
   const { data: launches } = useSpaceX(launchPad ? "/launches/past" : null, {
     limit: 3,
     order: "desc",
@@ -44,13 +59,22 @@ export default function LaunchPad() {
 
   return (
     <div>
-      <Breadcrumbs
-        items={[
-          { label: "Home", to: "/" },
-          { label: "Launch Pads", to: ".." },
-          { label: launchPad.name },
-        ]}
-      />
+      <Box d="flex" alignItems="center">
+        <Breadcrumbs
+          items={[
+            { label: "Home", to: "/" },
+            { label: "Launch Pads", to: ".." },
+            { label: launchPad.name },
+          ]}
+        />
+        <LikeButton
+          isFavorited={isFavorited}
+          addFavorite={() => dispatch(addFavorite(launchPad))}
+          removeFavorite={() =>
+            dispatch(removeFavorite({ item: launchPad, idKey: RESOURCE_KEY }))
+          }
+        />
+      </Box>
       <Header launchPad={launchPad} />
       <Box m={[3, 6]}>
         <LocationAndVehicles launchPad={launchPad} />
