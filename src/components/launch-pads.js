@@ -54,6 +54,8 @@ export default function LaunchPads() {
   );
 }
 
+//Launch Pad Item comes now in a new Mini flavor 
+//the mini version is rendered in the sidebar
 export function LaunchPadItem({ launchPad, mini = false }) {
   const dispatch = useDispatch();
   const isFavorited = useSelector((state) =>

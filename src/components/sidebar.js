@@ -24,6 +24,8 @@ import { LaunchPadItem } from "./launch-pads";
 const LAUNCH_RESOURCE_KEY = "flight_number";
 const LAUNCH_PAD_RESOURCE_KEY = "site_id";
 
+// this holds the content for the sidebar menu
+// nothing too fancy, just used a simple Stack component from Chakra
 const SidebarContent = () => {
   const favorites = useSelector(getFavorites);
   const favoriteLaunches = favorites.filter((f) =>

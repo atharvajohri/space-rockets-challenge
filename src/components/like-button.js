@@ -2,6 +2,8 @@ import React from "react";
 import { Button } from "@chakra-ui/core";
 import { StarIcon } from "@chakra-ui/icons";
 
+// The Like Button!
+// Darkened when is in the liked state
 export default function LikeButton({
   item,
   addFavorite,

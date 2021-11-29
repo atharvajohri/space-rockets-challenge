@@ -11,6 +11,7 @@ import LaunchPad from "./launch-pad";
 import Sidebar from "./sidebar";
 
 export default function App() {
+  //Setup the sidebars state to be handled by it's parent component, ie, App
   const [isSidebarOpen, setSidebarOpen] = useState(false);
   const toggleSidebar = () => setSidebarOpen(!isSidebarOpen);
 

@@ -17,7 +17,6 @@ import Breadcrumbs from "./breadcrumbs";
 import LoadMoreButton from "./load-more-button";
 
 import LikeButton from "./like-button";
-// import { saveFavorite, deleteFavorite, loadFavorites } from "../utils/storage";
 
 const PAGE_SIZE = 12;
 const RESOURCE_KEY = "flight_number";
@@ -56,6 +55,8 @@ export default function Launches() {
   );
 }
 
+//Launch Item comes now in a new Mini flavor 
+//the mini version is rendered in the sidebar
 export function LaunchItem({ launch, mini = false }) {
   const dispatch = useDispatch();
   const isFavorited = useSelector((state) =>
