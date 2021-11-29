@@ -1,4 +1,11 @@
 import React from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  addFavorite,
+  removeFavorite,
+  isFavorite,
+} from "../store/favoritesSlice";
+
 import { useParams, Link as RouterLink } from "react-router-dom";
 import { format as timeAgo } from "timeago.js";
 import { Watch, MapPin, Navigation, Layers } from "react-feather";
@@ -27,8 +34,17 @@ import { formatLocalDateTime, formatDateTime } from "../utils/format-date";
 import Error from "./error";
 import Breadcrumbs from "./breadcrumbs";
 
+import LikeButton from "./like-button";
+
+const RESOURCE_KEY = "flight_number";
+
 export default function Launch() {
-  let { launchId } = useParams();
+  const { launchId } = useParams();
+  const dispatch = useDispatch();
+  const isFavorited = useSelector((state) =>
+    isFavorite(state, { idKey: RESOURCE_KEY, id: launchId })
+  );
+
   const { data: launch, error } = useSpaceX(`/launches/${launchId}`);
 
   if (error) return <Error />;
@@ -42,13 +58,22 @@ export default function Launch() {
 
   return (
     <div>
-      <Breadcrumbs
-        items={[
-          { label: "Home", to: "/" },
-          { label: "Launches", to: ".." },
-          { label: `#${launch.flight_number}` },
-        ]}
-      />
+      <Box d="flex" alignItems="center">
+        <Breadcrumbs
+          items={[
+            { label: "Home", to: "/" },
+            { label: "Launches", to: ".." },
+            { label: `#${launch.flight_number}` },
+          ]}
+        />
+        <LikeButton
+          isFavorited={isFavorited}
+          addFavorite={() => dispatch(addFavorite(launch))}
+          removeFavorite={() =>
+            dispatch(removeFavorite({ item: launch, idKey: RESOURCE_KEY }))
+          }
+        />
+      </Box>
       <Header launch={launch} />
       <Box m={[3, 6]}>
         <TimeAndLocation launch={launch} />
