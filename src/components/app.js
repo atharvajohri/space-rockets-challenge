@@ -9,6 +9,7 @@ import Home from "./home";
 import LaunchPads from "./launch-pads";
 import LaunchPad from "./launch-pad";
 import Sidebar from "./sidebar";
+import Timeline from "./timeline";
 
 export default function App() {
   //Setup the sidebars state to be handled by it's parent component, ie, App
@@ -25,6 +26,7 @@ export default function App() {
         <Route path="/launches/:launchId" element={<Launch />} />
         <Route path="/launch-pads" element={<LaunchPads />} />
         <Route path="/launch-pads/:launchPadId" element={<LaunchPad />} />
+        <Route path="/timeline" element={<Timeline />} />
       </Routes>
     </div>
   );
