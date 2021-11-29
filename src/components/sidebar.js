@@ -86,7 +86,7 @@ const Sidebar = ({ isOpen, onClose }) => {
         <DrawerContent>
           <DrawerCloseButton />
           <DrawerHeader>Favorites</DrawerHeader>
-          <DrawerBody>
+          <DrawerBody overflow="auto">
             <SidebarContent />
           </DrawerBody>
         </DrawerContent>
