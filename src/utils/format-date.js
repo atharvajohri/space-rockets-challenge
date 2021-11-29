@@ -26,8 +26,8 @@ export function formatLocalDateTime(timestamp) {
 
   const dateTimeRegex = /(....-..-..)T(..:..:..)(.*)/; //probably a better way to write this
   const launchLocalDateTimeParts = dateTimeRegex.exec(timestamp);
-
-  if (!launchLocalDateTimeParts || launchLocalDateTimeParts && launchLocalDateTimeParts.length != 4) {
+  const launchLocalDateTimePartsInvalid = launchLocalDateTimeParts && launchLocalDateTimeParts.length !== 4
+  if (!launchLocalDateTimeParts || launchLocalDateTimePartsInvalid) {
     return formatDateTime(timestamp);
   }
 
